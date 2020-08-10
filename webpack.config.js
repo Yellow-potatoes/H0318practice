@@ -12,6 +12,7 @@ module.exports = {
   output: {
     path: resolve(__dirname, "dist"),
     filename: "index.js", // string
+    publicPath:'/'
   },
 
   // mode工作模式
@@ -31,10 +32,11 @@ module.exports = {
               '@babel/preset-env', //ES6==>ES5
               '@babel/preset-react' //jsx===>js
             ], // ES6 ==> ES5
-            plugins:[
-							//让babel认识类中的新写法
-							'@babel/plugin-proposal-class-properties' 
-						]
+            plugins: [
+              ['@babel/plugin-proposal-decorators',{legacy: true}],
+              //让babel认识类中的新写法
+              '@babel/plugin-proposal-class-properties'
+            ]
           }
         }
       },
@@ -84,19 +86,20 @@ module.exports = {
     port: 8080,//服务启动的端口
     open: true,//是否自动打开浏览器}
     proxy: {
-			'/api': { // 只有/api开头的请求，才会转发给target配置的服务器
-					target: 'http://localhost:3000', //转发给谁
-					pathRewrite: {'^/api' : ''}, //改写路径
-					changeOrigin: true, //如果前台脚手架的主机名和服务器的主机名不一致，则需要changeOrigin: true
-			}
-	},
+      '/api': { // 只有/api开头的请求，才会转发给target配置的服务器
+        target: 'http://localhost:3000', //转发给谁
+        pathRewrite: { '^/api': '' }, //改写路径
+        changeOrigin: true, //如果前台脚手架的主机名和服务器的主机名不一致，则需要changeOrigin: true
+      }
+    },
+    historyApiFallback: true,// 任意的 404 响应都被替代为 index.html 备胎
   },
 
   // 配置省略后缀
-  resolve:{
+  resolve: {
     extensions: [".js", '.jsx', ".json"],//解决导入省略后缀名称
-    alias:{
-        '@':resolve(__dirname, 'src')//取别名，让@代替根路径下的src，即：'/src'
+    alias: {
+      '@': resolve(__dirname, 'src')//取别名，让@代替根路径下的src，即：'/src'
     }
-}
+  }
 }
